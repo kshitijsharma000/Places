@@ -12,20 +12,32 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.Serializable;
 import java.util.ArrayList;
+
+import in.eswarm.places.network.Appcontroller;
 
 public class CategoryListActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     ProgressDialog dialog;
     AdapterCategoryList adapter;
-    ArrayList<Model_data> modelDataArrayList;
+    ArrayList<Model_data.Place> places;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_category_list_activity);
+        setContentView(R.layout.activity_category_list);
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerCategoryList);
 
@@ -33,11 +45,9 @@ public class CategoryListActivity extends AppCompatActivity {
             @Override
             public void Onclick(View view, int position) {
                 System.out.println("inside recycler item on click : " + position);
-                //ActivityData data = adapter_favView.getItem(position);
-                //todo replace by new adapter
+                Model_data.Place place = adapter.getItem(position);
                 Intent intent = new Intent(CategoryListActivity.this, DetailActivity.class);
-                //intent.putExtra("activityObject", data);
-                //todo put item index
+                intent.putExtra("PlaceObject", (Serializable) place);
                 startActivity(intent);
             }
 
@@ -47,7 +57,7 @@ public class CategoryListActivity extends AppCompatActivity {
             }
         }));
 
-        adapter = new AdapterCategoryList(new ArrayList<Model_data>(), this);
+        adapter = new AdapterCategoryList(new ArrayList<Model_data.Place>(), this);
         get_data_from_db();
         update_recyclerview();
     }
@@ -55,12 +65,64 @@ public class CategoryListActivity extends AppCompatActivity {
     private void get_data_from_db() {
         dialog = new ProgressDialog(this);
         dialog.setMessage("Loading...");
-        dialog.setTitle("Loading");
+        dialog.setTitle("Fetching Data");
         dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         dialog.show();
 
-        //Todo network query here..
+        get_data_from_server();
+
         dialog.hide();
+    }
+
+    private void get_data_from_server() {
+        String url = Constants.baseurl + Constants.cities;
+        System.out.println("url : " + url);
+
+        JsonObjectRequest list_request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                System.out.println("got data : " + jsonObject.toString());
+                places = new ArrayList<>();
+                try {
+                    JSONArray jArray = jsonObject.getJSONArray("activities");
+                    for (int i = 0; i < jArray.length(); i++) {
+                        add_to_dataset(jArray.getJSONObject(i));
+                    }
+                    adapter.setItemList(places);
+                    adapter.notifyDataSetChanged();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    System.out.println("error in json parsing");
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                System.out.println("error in getting data");
+            }
+        });
+        Appcontroller.getmInstance().addtoRequestqueue(list_request);
+    }
+
+    private void add_to_dataset(JSONObject jsonObject) {
+        Model_data.Place place = new Model_data.Place();
+        try {
+            place.setCategory_name(jsonObject.getString("category_name"));
+            place.setCategory_name(jsonObject.getString("place_id"));
+            place.setCategory_name(jsonObject.getString("city_name"));
+            place.setCategory_name(jsonObject.getString("name"));
+            place.setCategory_name(jsonObject.getString("description"));
+            place.setCategory_name(jsonObject.getString("url"));
+            place.setCategory_name(jsonObject.getString("timing_start"));
+            place.setCategory_name(jsonObject.getString("timing_end"));
+            place.setCategory_name(jsonObject.getString("long_coord"));
+            place.setCategory_name(jsonObject.getString("lat_coord"));
+            place.setCategory_name(jsonObject.getString("likes"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        places.add(place);
     }
 
     private void update_recyclerview() {
