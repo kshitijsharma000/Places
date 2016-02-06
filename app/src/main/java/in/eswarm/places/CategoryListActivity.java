@@ -52,7 +52,7 @@ public class CategoryListActivity extends AppCompatActivity {
                 System.out.println("inside recycler item on click : " + position);
                 Model_data.Place place = adapter.getItem(position);
                 Intent intent = new Intent(CategoryListActivity.this, DetailActivity.class);
-                intent.putExtra("PlaceObject", (Serializable) place);
+                //intent.putExtra("PlaceObject", place);
                 startActivity(intent);
             }
 

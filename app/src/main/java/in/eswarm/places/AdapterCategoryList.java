@@ -25,6 +25,7 @@ public class AdapterCategoryList extends RecyclerView.Adapter<AdapterCategoryLis
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        System.out.println("inside view holder");
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_category_items, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
@@ -32,13 +33,14 @@ public class AdapterCategoryList extends RecyclerView.Adapter<AdapterCategoryLis
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        System.out.println("inside on bind view holder");
         holder.textView_SiteTitle.setText(places.get(position).getName());
         holder.textView_SiteTimings.setText(places.get(position).getTiming_start() + "-" + places.get(position).getTiming_end());
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return places.size();
     }
 
     public Model_data.Place getItem(int position) {

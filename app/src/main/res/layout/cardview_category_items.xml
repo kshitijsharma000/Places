@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_card"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="180dp"
+    android:layout_margin="5dp"
     android:background="@android:color/white"
     android:elevation="5dp"
     android:gravity="center"
@@ -18,8 +19,7 @@
             android:id="@+id/layout_bg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/bangalore_palace"
-            android:padding="5dp" />
+            android:background="@drawable/bangalore_palace" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -45,6 +45,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:gravity="left"
                     android:layout_weight="1"
                     android:orientation="horizontal">
 
@@ -53,24 +55,26 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Timings : "
-                        android:textStyle="bold"
                         android:textColor="@android:color/white"
-                        android:textSize="20dp" />
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/site_timings"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:textStyle="bold"
                         android:layout_weight="1"
                         android:text="8am-5pm"
                         android:textColor="@android:color/white"
-                        android:textSize="20dp" />
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:layout_gravity="right"
                     android:layout_weight="1"
                     android:orientation="horizontal">
 
@@ -79,19 +83,19 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Distance : "
-                        android:textStyle="bold"
                         android:textColor="@android:color/white"
-                        android:textSize="20dp" />
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/site_distance"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textStyle="bold"
                         android:text="10km"
                         android:textColor="@android:color/white"
-                        android:textSize="20dp" />
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
         </RelativeLayout>
@@ -113,8 +117,8 @@
 
                 <ImageView
                     android:id="@+id/activity_card_image1"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:src="@drawable/ic_favorite_white_36dp" />
 
                 <TextView
@@ -125,20 +129,20 @@
                     android:gravity="center"
                     android:text="2"
                     android:textColor="@android:color/white"
-                    android:textSize="20dp" />
+                    android:textSize="15dp" />
             </LinearLayout>
 
             <ImageView
                 android:id="@+id/activity_card_image2"
                 android:layout_width="0dp"
-                android:layout_height="36dp"
+                android:layout_height="24dp"
                 android:layout_weight="1"
                 android:src="@drawable/ic_share_white_36dp" />
 
             <ImageView
                 android:id="@+id/activity_card_image3"
                 android:layout_width="0dp"
-                android:layout_height="36dp"
+                android:layout_height="24dp"
                 android:layout_weight="1"
                 android:src="@drawable/ic_map_white_36dp" />
         </LinearLayout>
