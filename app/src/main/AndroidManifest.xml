@@ -36,7 +36,8 @@
             </intent-filter>
             -->
         </activity>
-        <activity android:name=".CategoryList_activity"></activity>
+        <activity android:name=".CategoryListActivity" />
+        <activity android:name=".DetailActivity"></activity>
     </application>
 
 </manifest>

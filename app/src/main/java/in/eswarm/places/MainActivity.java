@@ -2,9 +2,8 @@ package in.eswarm.places;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -12,20 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-
-import in.eswarm.places.network.Appcontroller;
+import android.view.View;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -112,46 +98,6 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
-
-
-    private void get_data_from_server() {
-        String url = Constants.baseurl + Constants.cities;
-        System.out.println("url : " + url);
-
-        JsonObjectRequest list_request = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject jsonObject) {
-                System.out.println("got data : " + jsonObject.toString());
-                activityDatas = new ArrayList<>();
-                try {
-                    JSONArray jArray = jsonObject.getJSONArray("activities");
-                    for (int i = 0; i < jArray.length(); i++) {
-                        add_to_dataset(jArray.getJSONObject(i));
-                    }
-                    adapter_activityView.setItemList(activityDatas);
-                    adapter_activityView.notifyDataSetChanged();
-
-                    String[] temp = new String[set_citySpinner.size()];
-                    set_citySpinner.toArray(temp);
-                    adapter_spinner = new ArrayAdapter<String>(getApplicationContext(), R.layout.spinner_item, temp);
-                    spinner.setAdapter(adapter_spinner);
-
-                    update_db();
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    System.out.println("error in json parsing");
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                System.out.println("error in getting data");
-            }
-        });
-
-        Appcontroller.getmInstance().addtoRequestqueue(list_request);
     }
 
 }
