@@ -7,27 +7,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.NetworkImageView;
-
 import java.util.ArrayList;
 
 /**
  * Created by Kshitij on 2/6/2016.
  */
-public class AdapterCategoryList extends RecyclerView.Adapter<AdapterCategoryList.ViewHolder>{
+public class AdapterCategoryList extends RecyclerView.Adapter<AdapterCategoryList.ViewHolder> {
 
     private ArrayList<Model_data.Place> places;
     private Context context;
 
 
-    public AdapterCategoryList (ArrayList<Model_data.Place> places, Context context) {
+    public AdapterCategoryList(ArrayList<Model_data.Place> places, Context context) {
         this.places = places;
         this.context = context;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_category_list, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_category_items, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
     }
@@ -51,7 +49,7 @@ public class AdapterCategoryList extends RecyclerView.Adapter<AdapterCategoryLis
         this.places = places;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
         TextView textView_SiteTitle;
         TextView textView_SiteTimings;
         TextView textView_SiteDistance;
