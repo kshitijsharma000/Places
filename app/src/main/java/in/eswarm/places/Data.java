@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 public class Data implements Serializable{
 
-    public static class Place {
+    public static class Place implements Serializable{
         String place_id;
         String city_name;
         String category_name;

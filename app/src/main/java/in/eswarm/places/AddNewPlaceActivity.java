@@ -40,6 +40,11 @@ public class AddNewPlaceActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_new_place);
 
         CardView cardView = (CardView) findViewById(R.id.card_add_new_place);
+
+        if(get_DB_Item_count() == 0){
+            cardView.setVisibility(View.GONE);
+        }
+
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,13 +63,13 @@ public class AddNewPlaceActivity extends AppCompatActivity {
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerAddNewPlace);
 
-        recyclerView.addOnItemTouchListener(new DragController(this, recyclerView, new Clicklistener() {
+        recyclerView.addOnItemTouchListener(new DragController(this, recyclerView, new DragController.Clicklistener() {
             @Override
             public void Onclick(View view, int position) {
                 System.out.println("inside recycler item on click : " + position);
                 Data.Place place = adapter.getItem(position);
                 Intent intent = new Intent(AddNewPlaceActivity.this, DetailActivity.class);
-                intent.putExtra("PlaceObject", (Serializable) place);
+                intent.putExtra("PlaceObject", place);
                 startActivity(intent);
             }
 
@@ -80,17 +85,33 @@ public class AddNewPlaceActivity extends AppCompatActivity {
     }
 
     private void get_data_from_user_places_db() {
-        Data.Place place;
+        Data.Place place = new Data.Place();
         try {
             DB snappy = DBFactory.open(getApplicationContext());
             String[] keys = snappy.findKeys("PlaceId");
+            if(keys.length != 0){
+                places = new ArrayList<>();
+            }
             for(String key : keys){
-                //place = snappy.get(key);
+                place = snappy.get(key, place.getClass());
+                places.add(place);
             }
         } catch (SnappydbException e) {
             e.printStackTrace();
         }
     }
+
+    private int get_DB_Item_count(){
+        try {
+            DB snappy = DBFactory.open(getApplicationContext());
+            String[] keys = snappy.findKeys("PlaceId");
+            return keys.length;
+        } catch (SnappydbException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
 
 
     @Override
@@ -115,7 +136,7 @@ public class AddNewPlaceActivity extends AppCompatActivity {
                 }
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(this, data);
-                // TODO: Handle the error.
+                     // TODO: Handle the error.
                 Log.i("AutocompleteApi", status.getStatusMessage());
 
             } else if (resultCode == RESULT_CANCELED) {
@@ -134,56 +155,4 @@ public class AddNewPlaceActivity extends AppCompatActivity {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
     }
-
-
-    private class DragController implements RecyclerView.OnItemTouchListener {
-        private RecyclerView recyclerView;
-        private GestureDetector gestureDetector;
-        private Clicklistener clicklistener;
-
-        public DragController(Context context, final RecyclerView recyclerView, final Clicklistener clicklistener) {
-            this.recyclerView = recyclerView;
-            this.clicklistener = clicklistener;
-            this.gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
-                @Override
-                public boolean onSingleTapUp(MotionEvent e) {
-                    //return super.onSingleTapUp(e);
-                    return true;
-                }
-
-                @Override
-                public void onLongPress(MotionEvent e) {
-                    View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
-                    if (child != null && clicklistener != null) {
-                        clicklistener.OnLongclick(child, recyclerView.getChildAdapterPosition(child));
-                    }
-                }
-            });
-        }
-
-        @Override
-        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-            View child = rv.findChildViewUnder(e.getX(), e.getY());
-            if (child != null && clicklistener != null && gestureDetector.onTouchEvent(e)) {
-                clicklistener.Onclick(child, rv.getChildAdapterPosition(child));
-            }
-            return false;
-        }
-
-        @Override
-        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-        }
-
-        @Override
-        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-        }
-    }
-
-    public static interface Clicklistener {
-        public void Onclick(View view, int position);
-
-        public void OnLongclick(View view, int position);
-    }
-
 }

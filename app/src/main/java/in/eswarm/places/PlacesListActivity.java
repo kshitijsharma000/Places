@@ -48,7 +48,7 @@ public class PlacesListActivity extends AppCompatActivity implements DataRetriev
                 System.out.println("inside recycler item on click : " + position);
                 Data.Place place = mAdapter.getItem(position);
                 Intent intent = new Intent(PlacesListActivity.this, DetailActivity.class);
-                //intent.putExtra("PlaceObject", place);
+                intent.putExtra("PlaceObject", place);
                 startActivity(intent);
             }
 
@@ -67,7 +67,7 @@ public class PlacesListActivity extends AppCompatActivity implements DataRetriev
     private void setRecyclerView() {
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.addItemDecoration(new SimpleSpaceDecorator(15, 10));
+        mRecyclerView.addItemDecoration(new SimpleSpaceDecorator(15,10));
         mRecyclerView.setHasFixedSize(true);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);

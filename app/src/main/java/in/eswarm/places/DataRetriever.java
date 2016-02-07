@@ -53,8 +53,8 @@ public class DataRetriever {
     }
 
     public void getPlaces(String city, String category) {
-        //String url = "http://eswarm.in:1985/bengaluru/historical/places";
-        String url = BASE_URL + city + "/" + category + "/places";
+        String url = "http://eswarm.in:1985/bengaluru/historical/places";
+        //String url = BASE_URL + city + "/" + category + "/places";
         makeRequest(url);
         System.out.println("getPlaces url : " + url);
     }
@@ -81,6 +81,7 @@ public class DataRetriever {
                     place.setPlace_id(jsonObject.getString("place_id"));
                     place.setCity_name(jsonObject.getString("city_name"));
                     place.setName(jsonObject.getString("name"));
+                    place.setUrl(jsonObject.getString("image_url"));
                     place.setDescription(jsonObject.getString("description"));
                     place.setTiming_start(jsonObject.getString("timing_start"));
                     place.setTiming_end(jsonObject.getString("timing_end"));
