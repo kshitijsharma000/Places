@@ -115,13 +115,15 @@ public class Data implements Serializable{
         private String city_name;
         private Integer likes;
         private String url;
+        private boolean local;
 
-        public Category(String name, String city_name, int likes, String url)
+        public Category(String name, String city_name, int likes, String url, boolean local)
         {
             this.name = name;
             this.city_name = city_name;
             this.likes = likes;
             this.url = url;
+            this.local = local;
         }
 
         public String getName() {
@@ -155,6 +157,15 @@ public class Data implements Serializable{
         public void setUrl(String url) {
             this.url = url;
         }
+
+        public boolean isLocal(){
+            return local;
+        }
+
+        public void setLocal(boolean local) {
+            this.local = local;
+        }
+
     }
 
     public static class City {

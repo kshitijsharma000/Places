@@ -30,7 +30,7 @@ public class AdapterAutoComplete extends RecyclerView.Adapter<AdapterAutoComplet
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        System.out.println("inside adapter autocomplete view holder");
+        System.out.println("inside mAdapter autocomplete view holder");
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_place_items, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
@@ -38,7 +38,7 @@ public class AdapterAutoComplete extends RecyclerView.Adapter<AdapterAutoComplet
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        System.out.println("inside adapter auto complete on bind view holder");
+        System.out.println("inside mAdapter auto complete on bind view holder");
         holder.textView_SiteTitle.setText(mPlaces.get(position).getName());
         holder.textView_SiteTimings.setText(mPlaces.get(position).getTiming_start() + "-" + mPlaces.get(position).getTiming_end());
         System.out.println("url : " + mPlaces.get(position).getUrl());

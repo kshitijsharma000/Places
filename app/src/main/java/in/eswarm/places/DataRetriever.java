@@ -119,7 +119,7 @@ public class DataRetriever {
                     int likes = jsonObject.getInt("likes");
                     String name = jsonObject.getString("name");
 
-                    Data.Category category = new Data.Category(name, city_name, likes, url);
+                    Data.Category category = new Data.Category(name, city_name, likes, url, false);
                     categoryList.add(category);
 
                 } catch (JSONException e) {

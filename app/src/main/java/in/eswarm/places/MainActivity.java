@@ -14,6 +14,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -30,6 +31,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.snappydb.DB;
+import com.snappydb.DBFactory;
+import com.snappydb.SnappydbException;
+
 import org.json.JSONObject;
 import java.util.ArrayList;
 
@@ -42,6 +47,8 @@ public class MainActivity extends AppCompatActivity
     ProgressDialog mDialog;
     AdapterCategoryList mAdapter;
     DataRetriever mDataRetriever;
+    public static final String TAG = MainActivity.class.getSimpleName();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +96,7 @@ public class MainActivity extends AppCompatActivity
                 Intent intent = new Intent(MainActivity.this, PlacesListActivity.class);
                 intent.putExtra(PlacesListActivity.CITY_NAME_EXTRA, category.getCity_name());
                 intent.putExtra(PlacesListActivity.CATEGORY_NAME_EXTRA, category.getName());
+                intent.putExtra(PlacesListActivity.IS_LOCAL, category.isLocal());
                 //intent.putExtra("PlaceObject", place);
                 startActivity(intent);
             }
@@ -208,9 +216,32 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void dataReceived(JSONObject jsonObject) {
         ArrayList<Data.Category> categories = DataRetriever.JSONToCategories(jsonObject);
+        ArrayList<Data.Category> catLocal = getLocalCategories();
+        categories.addAll(catLocal);
         mAdapter.setItemList(categories);
         mAdapter.notifyDataSetChanged();
         mDialog.hide();
+    }
+
+    private ArrayList<Data.Category> getLocalCategories()
+    {
+        ArrayList<Data.Category> categoryList = new ArrayList<>();
+        try {
+            DB snappy = DBFactory.open(getApplicationContext());
+            String keys[] = snappy.findKeys("collection");
+            for (int i = 0; i < keys.length; i++) {
+                Log.d(TAG, "Keys " + keys[0]);
+                Data.Category category = new Data.Category(keys[i], "", 0 , "", true);
+                categoryList.add(category);
+            }
+
+
+        }
+        catch (SnappydbException e) {
+            e.printStackTrace();
+            Log.e(TAG, "Error in snappy db");
+        }
+        return  categoryList;
     }
 
     @Override

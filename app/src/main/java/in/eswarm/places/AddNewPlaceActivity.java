@@ -1,6 +1,5 @@
 package in.eswarm.places;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -11,6 +10,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -27,16 +30,21 @@ public class AddNewPlaceActivity extends AppCompatActivity {
 
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
     RecyclerView recyclerView;
-    ProgressDialog dialog;
-    AdapterAutoComplete adapter;
+    AdapterAutoComplete mAdapter;
     CardView cardView;
     ArrayList<Data.Place> places;
+    EditText mEditText;
+    LinearLayout mSaveLayout;
+    Button mSaveButton;
+    ArrayList<Data.Place> mCollection;
+    public static final String TAG = AddNewPlaceActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_place);
 
+        mCollection = new ArrayList<>();
         cardView = (CardView) findViewById(R.id.card_add_new_place);
 
         FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.add_new_site_fab);
@@ -46,11 +54,6 @@ public class AddNewPlaceActivity extends AppCompatActivity {
                 launchAutoComplete();
             }
         });
-
-        if (get_DB_Item_count() != 0) {
-            System.out.println("db content is not null");
-            cardView.setVisibility(View.GONE);
-        }
 
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,10 +68,6 @@ public class AddNewPlaceActivity extends AppCompatActivity {
             @Override
             public void Onclick(View view, int position) {
                 System.out.println("inside recycler item on click : " + position);
-                /*Data.Place place = adapter.getItem(position);
-                Intent intent = new Intent(AddNewPlaceActivity.this, DetailActivity.class);
-                intent.putExtra("PlaceObject", place);
-                startActivity(intent);*/
             }
 
             @Override
@@ -77,9 +76,28 @@ public class AddNewPlaceActivity extends AppCompatActivity {
             }
         }));
 
-        adapter = new AdapterAutoComplete(new ArrayList<Data.Place>(), this);
-        get_data_from_user_places_db();
-        update_recyclerview();
+        mAdapter = new AdapterAutoComplete(new ArrayList<Data.Place>(), this);
+        setRecyclerView();
+        mEditText = (EditText) findViewById(R.id.collectionEdit);
+        mSaveLayout = (LinearLayout) findViewById(R.id.saveLayout);
+        mSaveButton = (Button) findViewById(R.id.saveButton);
+
+        mSaveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mCollection.size() == 0) {
+                    Toast.makeText(AddNewPlaceActivity.this, "Please add some places", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                if(mEditText.getText().length() == 0)
+                {
+                    Toast.makeText(AddNewPlaceActivity.this, "Please enter the collection name", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                saveCollection();
+            }
+        });
+
     }
 
     private void launchAutoComplete() {
@@ -95,37 +113,6 @@ public class AddNewPlaceActivity extends AppCompatActivity {
         }
     }
 
-    private void get_data_from_user_places_db() {
-        places = new ArrayList<>();
-        Data.Place place = new Data.Place();
-        try {
-            DB snappy = DBFactory.open(getApplicationContext());
-            String[] keys = snappy.findKeys("PlaceId");
-            for (String key : keys) {
-                place = snappy.get(key, place.getClass());
-                places.add(place);
-                System.out.println("place : " + place.getPlace_id());
-                System.out.println("place : " + place.getName());
-                System.out.println("place : " + place.getLat_coord());
-                System.out.println("place : " + place.getLong_coord());
-            }
-        } catch (SnappydbException e) {
-            e.printStackTrace();
-        }
-        adapter.setItemList(places);
-        adapter.notifyDataSetChanged();
-    }
-
-    private int get_DB_Item_count() {
-        try {
-            DB snappy = DBFactory.open(getApplicationContext());
-            String[] keys = snappy.findKeys("PlaceId");
-            return keys.length;
-        } catch (SnappydbException e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
 
 
     @Override
@@ -141,18 +128,9 @@ public class AddNewPlaceActivity extends AppCompatActivity {
                 model_place.setPlace_id(place.getId().toString());
                 model_place.setLat_coord(place.getLatLng().toString().split(",")[0].replace("(", ""));
                 model_place.setLong_coord(place.getLatLng().toString().split(",")[1].replace(")", ""));
-                try {
-                    DB snappy = DBFactory.open(getApplicationContext());
-                    snappy.put("PlaceId : " + model_place.getPlace_id(), model_place);
-                    snappy.close();
 
-                    get_data_from_user_places_db();
-                    update_recyclerview();
-                    cardView.setVisibility(View.GONE);
+                addPlace(model_place);
 
-                } catch (SnappydbException e) {
-                    e.printStackTrace();
-                }
             } else if (resultCode == PlaceAutocomplete.RESULT_ERROR) {
                 Status status = PlaceAutocomplete.getStatus(this, data);
                 // TODO: Handle the error.
@@ -164,8 +142,19 @@ public class AddNewPlaceActivity extends AppCompatActivity {
         }
     }
 
-    private void update_recyclerview() {
-        recyclerView.setAdapter(adapter);
+    private void addPlace(Data.Place place)
+    {
+        Log.d(TAG, "Add place " + place.category_name);
+        mCollection.add(place);
+        cardView.setVisibility(View.GONE);
+        mSaveLayout.setVisibility(View.VISIBLE);
+        updateRecycler();
+    }
+
+    private void setRecyclerView() {
+        mAdapter = new AdapterAutoComplete(mCollection, this);
+        recyclerView.setAdapter(mAdapter);
+        mAdapter.notifyDataSetChanged();
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new SimpleSpaceDecorator(10, 5));
         recyclerView.setHasFixedSize(true);
@@ -173,5 +162,38 @@ public class AddNewPlaceActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
+    }
+
+    private void updateRecycler()
+    {
+        mAdapter.setItemList(mCollection);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    private void saveCollection() {
+        if(mCollection.size() != 0)
+        {
+        try {
+            DB snappy = DBFactory.open(getApplicationContext());
+            String keys[] = snappy.findKeys("collection");
+            for(int i=0; i<keys.length ; i++ )
+            {
+                Log.d(TAG, "Keys " + keys[0]);
+            }
+
+            snappy.put("collection:" + mEditText.getText(), mCollection.toArray());
+            //snappy.put("PlaceId : " + model_place.getPlace_id(), model_place);
+            snappy.close();
+
+
+            Toast.makeText(this, "Your collection is saved", Toast.LENGTH_LONG);
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+
+        } catch (SnappydbException e) {
+            e.printStackTrace();
+            Log.e(TAG, "Error in snappy db");
+        }
+        }
     }
 }

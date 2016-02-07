@@ -35,7 +35,16 @@ public class AdapterCategoryList extends RecyclerView.Adapter<AdapterCategoryLis
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         System.out.println("inside on bind view holder");
-        holder.textView_SiteTitle.setText(mCategories.get(position).getName());
+        String name = mCategories.get(position).getName();
+        if(mCategories.get(position).isLocal())
+        {
+            name = name.substring(name.indexOf(':')+1);
+            holder.textView_SiteTitle.setText(name);
+        }
+
+        holder.textView_SiteTitle.setText(name);
+
+
         Image_Handler.get_image_from_url(mCategories.get(position).getUrl(), holder.imageView);
         //holder.textView_SiteTimings.setText(mPlaces.get(position).getTiming_start() + "-" + mPlaces.get(position).getTiming_end());
     }

@@ -1,14 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="in.eswarm.places.AddNewPlaceActivity">
 
+    <LinearLayout
+        android:id="@+id/saveLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:layout_alignParentTop="true"
+        android:weightSum="4"
+        android:orientation="horizontal">
+
+    <EditText
+            android:layout_weight="3"
+            android:id="@+id/collectionEdit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+
+            android:hint="Please enter your collection name"/>
+
+     <Button
+         android:layout_weight="1"
+         android:id="@+id/saveButton"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="Save"/>
+    </LinearLayout>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerAddNewPlace"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@id/saveLayout">
 
     </android.support.v7.widget.RecyclerView>
 
@@ -31,6 +59,7 @@
             android:padding="20dp"
             android:text="Search and add Places\nto your Collection"
             android:textSize="25dp" />
+
     </android.support.v7.widget.CardView>
 
     <android.support.design.widget.FloatingActionButton
