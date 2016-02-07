@@ -10,42 +10,43 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 /**
- * Created by Eswar on 07-02-2016
+ * Created by Kshitij on 2/6/2016.
  */
-public class AdapterCategoryList extends RecyclerView.Adapter<AdapterCategoryList.ViewHolder> {
+public class AdapterPlaceList extends RecyclerView.Adapter<AdapterPlaceList.ViewHolder> {
 
-    private ArrayList<Data.Category> mCategories;
+    private ArrayList<Data.Place> mPlaces;
 
 
-    public AdapterCategoryList(ArrayList<Data.Category> categories, Context context) {
-        this.mCategories = categories;
+    public AdapterPlaceList(ArrayList<Data.Place> places, Context context) {
+        this.mPlaces = places;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         System.out.println("inside view holder");
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_place_items, parent, false);
-        return new ViewHolder(view);
+        ViewHolder viewHolder = new ViewHolder(view);
+        return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         System.out.println("inside on bind view holder");
-        holder.textView_SiteTitle.setText(mCategories.get(position).getName());
-        //holder.textView_SiteTimings.setText(mPlaces.get(position).getTiming_start() + "-" + mPlaces.get(position).getTiming_end());
+        holder.textView_SiteTitle.setText(mPlaces.get(position).getName());
+        holder.textView_SiteTimings.setText(mPlaces.get(position).getTiming_start() + "-" + mPlaces.get(position).getTiming_end());
     }
 
     @Override
     public int getItemCount() {
-        return mCategories.size();
+        return mPlaces.size();
     }
 
-    public Data.Category getItem(int position) {
-        return mCategories.get(position);
+    public Data.Place getItem(int position) {
+        return mPlaces.get(position);
     }
 
-    public void setItemList(ArrayList<Data.Category> categories) {
-        this.mCategories = mCategories;
+    public void setItemList(ArrayList<Data.Place> places) {
+        this.mPlaces = places;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -64,4 +65,3 @@ public class AdapterCategoryList extends RecyclerView.Adapter<AdapterCategoryLis
         }
     }
 }
-

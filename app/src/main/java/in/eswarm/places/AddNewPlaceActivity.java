@@ -21,20 +21,18 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.snappydb.DB;
 import com.snappydb.DBFactory;
-import com.snappydb.KeyIterator;
 import com.snappydb.SnappydbException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class AddNewPlaceActivity extends AppCompatActivity {
 
     int PLACE_AUTOCOMPLETE_REQUEST_CODE = 1;
     RecyclerView recyclerView;
     ProgressDialog dialog;
-    AdapterCategoryList adapter;
-    ArrayList<Model_data.Place> places;
+    AdapterPlaceList adapter;
+    ArrayList<Data.Place> places;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +62,7 @@ public class AddNewPlaceActivity extends AppCompatActivity {
             @Override
             public void Onclick(View view, int position) {
                 System.out.println("inside recycler item on click : " + position);
-                Model_data.Place place = adapter.getItem(position);
+                Data.Place place = adapter.getItem(position);
                 Intent intent = new Intent(AddNewPlaceActivity.this, DetailActivity.class);
                 intent.putExtra("PlaceObject", (Serializable) place);
                 startActivity(intent);
@@ -76,13 +74,13 @@ public class AddNewPlaceActivity extends AppCompatActivity {
             }
         }));
 
-        adapter = new AdapterCategoryList(new ArrayList<Model_data.Place>(), this);
+        adapter = new AdapterPlaceList(new ArrayList<Data.Place>(), this);
         get_data_from_user_places_db();
         update_recyclerview();
     }
 
     private void get_data_from_user_places_db() {
-        Model_data.Place place;
+        Data.Place place;
         try {
             DB snappy = DBFactory.open(getApplicationContext());
             String[] keys = snappy.findKeys("PlaceId");
@@ -99,7 +97,7 @@ public class AddNewPlaceActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                Model_data.Place model_place = new Model_data.Place();
+                Data.Place model_place = new Data.Place();
                 Place place = PlaceAutocomplete.getPlace(this, data);
                 Log.i("AutocompleteApi", "Place: " + place.getId());
                 Log.i("AutocompleteApi", "Place: " + place.getName());

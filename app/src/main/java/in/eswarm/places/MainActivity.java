@@ -1,28 +1,36 @@
 package in.eswarm.places;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.app.SearchManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.view.View;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.ImageView;
+import org.json.JSONObject;
+import java.util.ArrayList;
 
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, DataRetriever.DataListener {
+
+    RecyclerView mRecyclerView;
+    ProgressDialog mDialog;
+    AdapterCategoryList mAdapter;
+    DataRetriever mDataRetriever;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +43,7 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this,CategoryListActivity.class));
+                startActivity(new Intent(MainActivity.this, PlacesListActivity.class));
             }
         });
 
@@ -48,7 +56,51 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        ImageView imageView = (ImageView) findViewById(R.id.cityImage);
+        imageView.setImageResource(R.drawable.blore);
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerCategoryList);
+
+        mRecyclerView.addOnItemTouchListener(new DragController(this, mRecyclerView, new DragController.Clicklistener() {
+            @Override
+            public void Onclick(View view, int position) {
+                System.out.println("inside recycler item on click : " + position);
+                Data.Category category = mAdapter.getItem(position);
+                Intent intent = new Intent(MainActivity.this, PlacesListActivity.class);
+                intent.putExtra(PlacesListActivity.CITY_NAME_EXTRA, category.getCity_name());
+                intent.putExtra(PlacesListActivity.CATEGORY_NAME_EXTRA, category.getName());
+                //intent.putExtra("PlaceObject", place);
+                startActivity(intent);
+            }
+
+            @Override
+            public void OnLongclick(View view, int position) {
+                System.out.println("inside recycler item on long click : " + position);
+            }
+        }));
+
+        mDialog = new ProgressDialog(this);
+        mDialog.setMessage("Loading...");
+        mDialog.setTitle("Fetching Data");
+        mDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+
+        mAdapter = new AdapterCategoryList(new ArrayList<Data.Category>(), this);
+        mDataRetriever = new DataRetriever(this);
+        mDataRetriever.getCategories("Bengaluru");
+        setRecyclerView();
     }
+
+    private void setRecyclerView() {
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.addItemDecoration(new SimpleSpaceDecorator(15, 10));
+        mRecyclerView.setHasFixedSize(true);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -64,6 +116,15 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main2, menu);
+
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
+
         return true;
     }
 
@@ -107,4 +168,21 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    @Override
+    public void requestStart() {
+        mDialog.show();
+    }
+
+    @Override
+    public void dataReceived(JSONObject jsonObject) {
+        ArrayList<Data.Category> categories = DataRetriever.JSONToCategories(jsonObject);
+        mAdapter.setItemList(categories);
+        mAdapter.notifyDataSetChanged();
+        mDialog.hide();
+    }
+
+    @Override
+    public void error() {
+        mDialog.hide();
+    }
 }

@@ -98,4 +98,11 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
+
+    <string name="search_hint">Location</string>
+
+    <string name="climate_label">Climate</string>
+    <string name="hyphen">-</string>
+    <string name="label_ideal_time">Ideal Time</string>
+
 </resources>

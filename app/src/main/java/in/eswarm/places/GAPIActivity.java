@@ -23,7 +23,7 @@ public class GAPIActivity extends AppCompatActivity implements GoogleApiClient.C
     private boolean mResolvingError = false;
     // Request code to use when launching the resolution activity
     private static final int REQUEST_RESOLVE_ERROR = 1001;
-    // Unique tag for the error dialog fragment
+    // Unique tag for the error mDialog fragment
     private static final String DIALOG_ERROR = "dialog_error";
     private static final String STATE_RESOLVING_ERROR = "resolving_error";
     public static final String TAG = GAPIActivity.class.getSimpleName();
@@ -94,7 +94,7 @@ public class GAPIActivity extends AppCompatActivity implements GoogleApiClient.C
                 mGoogleApiClient.connect();
             }
         } else {
-            // Show dialog using GoogleApiAvailability.getErrorDialog()
+            // Show mDialog using GoogleApiAvailability.getErrorDialog()
             showErrorDialog(result.getErrorCode());
             mResolvingError = true;
         }
@@ -113,9 +113,9 @@ public class GAPIActivity extends AppCompatActivity implements GoogleApiClient.C
         }
     }
 
-    /* Creates a dialog for an error message */
+    /* Creates a mDialog for an error message */
     private void showErrorDialog(int errorCode) {
-        // Create a fragment for the error dialog
+        // Create a fragment for the error mDialog
         ErrorDialogFragment dialogFragment = new ErrorDialogFragment();
         // Pass the error that should be displayed
         Bundle args = new Bundle();
@@ -130,18 +130,18 @@ public class GAPIActivity extends AppCompatActivity implements GoogleApiClient.C
         outState.putBoolean(STATE_RESOLVING_ERROR, mResolvingError);
     }
 
-    /* Called from ErrorDialogFragment when the dialog is dismissed. */
+    /* Called from ErrorDialogFragment when the mDialog is dismissed. */
     public void onDialogDismissed() {
         mResolvingError = false;
     }
 
-    /* A fragment to display an error dialog */
+    /* A fragment to display an error mDialog */
     public static class ErrorDialogFragment extends DialogFragment {
         public ErrorDialogFragment() { }
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
-            // Get the error code and retrieve the appropriate dialog
+            // Get the error code and retrieve the appropriate mDialog
             int errorCode = this.getArguments().getInt(DIALOG_ERROR);
             return GoogleApiAvailability.getInstance().getErrorDialog(
                     this.getActivity(), errorCode, REQUEST_RESOLVE_ERROR);

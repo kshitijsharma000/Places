@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Created by Kshitij on 2/6/2016.
  */
 
-public class Model_data implements Serializable{
+public class Data implements Serializable{
 
     public static class Place {
         String place_id;
@@ -111,10 +111,18 @@ public class Model_data implements Serializable{
     }
 
     public static class Category {
-        String name;
-        String city_name;
-        Integer likes;
-        String url;
+        private String name;
+        private String city_name;
+        private Integer likes;
+        private String url;
+
+        public Category(String name, String city_name, int likes, String url)
+        {
+            this.name = name;
+            this.city_name = city_name;
+            this.likes = likes;
+            this.url = url;
+        }
 
         public String getName() {
             return name;
