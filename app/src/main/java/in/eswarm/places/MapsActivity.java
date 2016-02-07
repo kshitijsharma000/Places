@@ -1,6 +1,5 @@
 package in.eswarm.places;
 
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -31,11 +30,13 @@ public class MapsActivity extends GAPIActivity implements OnMapReadyCallback {
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
 
-        Data.Place localplace = (Data.Place) getIntent().getExtras().get("PlaceObject");
-        System.out.println("place name : "+ localplace.getName());
-        System.out.println("place id : "+ localplace.getPlace_id());
-        localPlaceId = localplace.getPlace_id();
-        getLatLong();
+        if (getIntent().getExtras() != null) {
+            Data.Place localplace = (Data.Place) getIntent().getExtras().get("PlaceObject");
+            System.out.println("place name : " + localplace.getName());
+            System.out.println("place id : " + localplace.getPlace_id());
+            localPlaceId = localplace.getPlace_id();
+            getLatLong();
+        }
     }
 
     private void getLatLong() {
@@ -48,11 +49,11 @@ public class MapsActivity extends GAPIActivity implements OnMapReadyCallback {
 
                             String temp = myPlace.getLatLng().toString();
                             String loc = temp.split(":")[1];
-                            lat = Double.valueOf(loc.split(",")[0].replace("(",""));
-                            loong = Double.valueOf(loc.split(",")[1].replace(")",""));
+                            lat = Double.valueOf(loc.split(",")[0].replace("(", ""));
+                            loong = Double.valueOf(loc.split(",")[1].replace(")", ""));
 
                             Log.i("map activity", "Place latlong: " + myPlace.getLatLng().toString());
-                            Log.i("map activity", "Place lat: " + lat.toString() + " long : "+ loong.toString());
+                            Log.i("map activity", "Place lat: " + lat.toString() + " long : " + loong.toString());
 
                             mapFragment.getMapAsync(MapsActivity.this);
                         } else {
@@ -62,6 +63,7 @@ public class MapsActivity extends GAPIActivity implements OnMapReadyCallback {
                     }
                 });
     }
+
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
@@ -80,5 +82,6 @@ public class MapsActivity extends GAPIActivity implements OnMapReadyCallback {
         LatLng sydney = new LatLng(lat, loong);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(20.0f));
     }
 }
