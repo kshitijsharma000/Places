@@ -46,10 +46,10 @@ public class PlacesListActivity extends AppCompatActivity implements DataRetriev
             @Override
             public void Onclick(View view, int position) {
                 System.out.println("inside recycler item on click : " + position);
-                Data.Place place = mAdapter.getItem(position);
+                /*Data.Place place = mAdapter.getItem(position);
                 Intent intent = new Intent(PlacesListActivity.this, DetailActivity.class);
                 intent.putExtra("PlaceObject", place);
-                startActivity(intent);
+                startActivity(intent);*/
             }
 
             @Override

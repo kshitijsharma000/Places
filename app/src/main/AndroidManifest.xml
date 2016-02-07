@@ -38,9 +38,12 @@
             </intent-filter>
             -->
         </activity>
-        <activity android:name=".PlacesListActivity" />
-        <activity android:name=".DetailActivity" />
-        <activity android:name=".AddNewPlaceActivity"></activity>
+        <activity android:name=".PlacesListActivity"
+            android:label="@string/place_list"/>
+        <activity android:name=".DetailActivity"
+            android:label="@string/details"/>
+        <activity android:name=".AddNewPlaceActivity"
+            android:label="@string/add_new_place"/>
     </application>
 
 </manifest>
