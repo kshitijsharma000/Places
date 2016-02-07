@@ -189,13 +189,25 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.user_profile) {
+            System.out.println("inside user profiles");
+        } else if (id == R.id.saved_collections) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.cities) {
 
-        } else if (id == R.id.nav_manage) {
+        } else if (id == R.id.bangalore) {
+            mDataRetriever.getCategories("Bangalore");
+            setRecyclerView();
+        } else if (id == R.id.Chennai) {
+            mDataRetriever.getCategories("Chennai");
+            setRecyclerView();
+        } else if (id == R.id.Delhi) {
+            mDataRetriever.getCategories("Delhi");
+            setRecyclerView();
+        } else if (id == R.id.Mumbai) {
+            mDataRetriever.getCategories("Mumbai");
+            setRecyclerView();
+        } else if (id == R.id.settings) {
 
         } else if (id == R.id.nav_share) {
 

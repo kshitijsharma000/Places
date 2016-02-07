@@ -26,6 +26,7 @@ public class PlacesListActivity extends AppCompatActivity implements DataRetriev
     AdapterPlaceList mAdapter;
     ArrayList<Data.Place> mPlaces;
     DataRetriever mDataRetriever;
+    public static int index;
 
     public static final String CITY_NAME_EXTRA = "CIY_NAME";
     public static final String CATEGORY_NAME_EXTRA = "CAT_NAME";
@@ -62,6 +63,7 @@ public class PlacesListActivity extends AppCompatActivity implements DataRetriev
             @Override
             public void Onclick(View view, int position) {
                 System.out.println("inside recycler item on click : " + position);
+                index = position;
                 /*Data.Place place = mAdapter.getItem(position);
                 Intent intent = new Intent(PlacesListActivity.this, DetailActivity.class);
                 intent.putExtra("PlaceObject", place);

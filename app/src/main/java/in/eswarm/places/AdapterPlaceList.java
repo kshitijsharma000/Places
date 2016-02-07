@@ -7,9 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.toolbox.NetworkImageView;
 
@@ -45,7 +43,6 @@ public class AdapterPlaceList extends RecyclerView.Adapter<AdapterPlaceList.View
         holder.textView_SiteTimings.setText(mPlaces.get(position).getTiming_start() + "-" + mPlaces.get(position).getTiming_end());
         System.out.println("url : " + mPlaces.get(position).getUrl());
         Image_Handler.get_image_from_url(mPlaces.get(position).getUrl(), holder.imageView);
-        holder.imageView.setTag(position);
     }
 
     @Override
@@ -89,7 +86,7 @@ public class AdapterPlaceList extends RecyclerView.Adapter<AdapterPlaceList.View
 
         @Override
         public void onClick(View v) {
-            switch (v.getId()){
+            switch (v.getId()) {
                 case R.id.button_fav:
                     System.out.println("click fav");
                     break;
@@ -97,14 +94,15 @@ public class AdapterPlaceList extends RecyclerView.Adapter<AdapterPlaceList.View
                     System.out.println("click share");
                     break;
                 case R.id.button_direction:
+
                     System.out.println("click direction");
+                    Data.Place loc = mPlaces.get(PlacesListActivity.index);
+                    Intent intentMap = new Intent(context, MapsActivity.class);
+                    intentMap.putExtra("PlaceObject", loc);
+                    context.startActivity(new Intent(context, MapsActivity.class));
+                    context.startActivity(intentMap);
                     break;
                 case R.id.bg_card_image:
-                    int pos = (Integer) v.getTag();
-                    Data.Place place = mPlaces.get(pos);
-                    Intent intent = new Intent(context, DetailActivity.class);
-                    intent.putExtra("PlaceObject", place);
-                    context.startActivity(intent);
                     break;
             }
         }

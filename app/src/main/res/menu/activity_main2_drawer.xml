@@ -3,28 +3,44 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
+            android:id="@+id/user_profile"
+            android:icon="@drawable/ic_account_circle_white_36dp"
+            android:title="Profile" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
+            android:id="@+id/saved_collections"
+            android:icon="@drawable/ic_collections_white_36dp"
+            android:title="Collections" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
+            android:id="@+id/cities"
+            android:icon="@drawable/ic_location_city_white_36dp"
+            android:title="Cities">
+            <menu xmlns:android="http://schemas.android.com/apk/res/android"
+                android:checkable="true">
+                <item
+                    android:id="@+id/bangalore"
+                    android:title="Bangalore" />
+                <item
+                    android:id="@+id/Chennai"
+                    android:title="Chennai" />
+                <item
+                    android:id="@+id/Delhi"
+                    android:title="Delhi" />
+                <item
+                    android:id="@+id/Mumbai"
+                    android:title="Mumbai" />
+            </menu>
+        </item>
         <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:id="@+id/settings"
+            android:icon="@drawable/ic_settings_white_36dp"
+            android:title="Settings" />
     </group>
 
     <item android:title="Communicate">
         <menu>
             <item
                 android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/ic_share_white_36dp"
                 android:title="Share" />
             <item
                 android:id="@+id/nav_send"

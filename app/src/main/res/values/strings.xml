@@ -107,5 +107,6 @@
     <string name="place_list">Place List</string>
     <string name="details">Details</string>
     <string name="add_new_place">Add New Place</string>
+    <string name="title_activity_maps">Map</string>
 
 </resources>
