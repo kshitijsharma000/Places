@@ -8,7 +8,9 @@
 
     <com.android.volley.toolbox.NetworkImageView
         android:id="@+id/detail_site_image"
+        android:src="@drawable/bangalore_palace"
         android:layout_width="match_parent"
+        android:scaleType="centerCrop"
         android:layout_height="180dp" />
 
     <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -19,12 +21,15 @@
         android:layout_below="@+id/detail_site_image"
         android:background="@android:color/white"
         android:layout_margin="5dp"
+        android:padding="8dp"
         android:elevation="5dp"
+        android:layout_marginTop="10dp"
         android:gravity="center"
         app:cardCornerRadius="5dp"
         app:cardElevation="5dp">
 
         <RelativeLayout
+            android:padding="8dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -41,7 +46,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/deatil_site_desc_label"
-                android:text="Dummy Description. Dummy Description. Dummy Description. Dummy Description. Dummy Description. Dummy Description.Dummy Description."
+                android:text=""
                 android:textSize="@dimen/place_autocomplete_prediction_secondary_text" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
@@ -59,11 +64,13 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="10dp"
         android:elevation="5dp"
+        android:padding="8dp"
         android:gravity="center"
         app:cardCornerRadius="5dp"
         app:cardElevation="5dp">
 
         <RelativeLayout
+            android:padding="8dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -98,7 +105,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/deatil_site_other_info_label"
-                android:text="Dummy info dummy inof dummy info"
+                android:text="None"
                 android:textSize="@dimen/place_autocomplete_prediction_secondary_text" />
 
         </RelativeLayout>
@@ -113,8 +120,7 @@
         android:layout_alignParentRight="true"
         android:layout_centerHorizontal="true"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="40dp"
-        android:layout_marginRight="40dp"
+        android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_navigation_white_36dp" />
 
 </RelativeLayout>

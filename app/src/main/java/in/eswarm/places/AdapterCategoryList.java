@@ -28,7 +28,7 @@ public class AdapterCategoryList extends RecyclerView.Adapter<AdapterCategoryLis
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         System.out.println("inside view holder");
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_place_items, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_category_items, parent, false);
         return new ViewHolder(view);
     }
 

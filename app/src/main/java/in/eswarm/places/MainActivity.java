@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity
     AdapterCategoryList mAdapter;
     DataRetriever mDataRetriever;
     public static final String TAG = MainActivity.class.getSimpleName();
-
+    private CollapsingToolbarLayout mCollapsing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,10 +58,10 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
         //setStatusBarColor(Color.WHITE);
 
-        CollapsingToolbarLayout collapsingToolbarLayout =
+        mCollapsing =
                 (CollapsingToolbarLayout) findViewById(R.id.collapsing);
 
-        collapsingToolbarLayout.setTitle("Bengaluru");
+        mCollapsing.setTitle("Bengaluru");
 
         /*if(getSupportActionBar() != null)
             getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -196,17 +196,27 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.cities) {
 
         } else if (id == R.id.bangalore) {
-            mDataRetriever.getCategories("Bangalore");
+            mDataRetriever.getCategories("Bengaluru");
             setRecyclerView();
+            mCollapsing.setTitle("Bengaluru");
         } else if (id == R.id.Chennai) {
-            mDataRetriever.getCategories("Chennai");
+            ImageView imageView = (ImageView) findViewById(R.id.backdrop);
+            imageView.setImageResource(R.drawable.chennai);
+            mDataRetriever.getCategories("Bengaluru");
+            mCollapsing.setTitle("Chennai");
             setRecyclerView();
         } else if (id == R.id.Delhi) {
-            mDataRetriever.getCategories("Delhi");
+            ImageView imageView = (ImageView) findViewById(R.id.backdrop);
+            imageView.setImageResource(R.drawable.delhi);
+            mDataRetriever.getCategories("Bengaluru");
             setRecyclerView();
+            mCollapsing.setTitle("Delhi");
         } else if (id == R.id.Mumbai) {
-            mDataRetriever.getCategories("Mumbai");
+            ImageView imageView = (ImageView) findViewById(R.id.backdrop);
+            imageView.setImageResource(R.drawable.mumbai);
+            mDataRetriever.getCategories("Bengaluru");
             setRecyclerView();
+            mCollapsing.setTitle("Mumbai");
         } else if (id == R.id.settings) {
 
         } else if (id == R.id.nav_share) {

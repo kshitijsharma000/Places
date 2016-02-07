@@ -103,6 +103,12 @@ public class AdapterPlaceList extends RecyclerView.Adapter<AdapterPlaceList.View
                     context.startActivity(intentMap);
                     break;
                 case R.id.bg_card_image:
+
+                    System.out.println("click direction");
+                    Data.Place place = mPlaces.get(PlacesListActivity.index);
+                    Intent intent = new Intent(context, DetailActivity.class);
+                    intent.putExtra("place", place);
+                    context.startActivity(intent);
                     break;
             }
         }

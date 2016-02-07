@@ -6,4 +6,6 @@
     <color name="colorTextImage">#676779</color>
     <color name="colorTint">#209e9e9e</color>
 
+    <color name="colorTintText">#999e9e9e</color>
+
 </resources>

@@ -37,9 +37,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
+                android:layout_marginTop="20dp"
                 android:text="Lalbagh"
+                android:background="@color/colorTintText"
+                android:gravity="center"
                 android:textColor="@android:color/white"
-                android:textSize="@dimen/text_size_heading"
+                android:textSize="24dp"
                 android:textStyle="bold" />
 
             <LinearLayout
