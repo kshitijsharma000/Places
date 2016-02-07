@@ -7,7 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.NetworkImageView;
+
 import java.util.ArrayList;
+
+import in.eswarm.places.network.Image_Handler;
 
 /**
  * Created by Eswar on 07-02-2016
@@ -32,6 +36,7 @@ public class AdapterCategoryList extends RecyclerView.Adapter<AdapterCategoryLis
     public void onBindViewHolder(ViewHolder holder, int position) {
         System.out.println("inside on bind view holder");
         holder.textView_SiteTitle.setText(mCategories.get(position).getName());
+        Image_Handler.get_image_from_url(mCategories.get(position).getUrl(), holder.imageView);
         //holder.textView_SiteTimings.setText(mPlaces.get(position).getTiming_start() + "-" + mPlaces.get(position).getTiming_end());
     }
 
@@ -45,13 +50,15 @@ public class AdapterCategoryList extends RecyclerView.Adapter<AdapterCategoryLis
     }
 
     public void setItemList(ArrayList<Data.Category> categories) {
-        this.mCategories = mCategories;
+        this.mCategories = categories;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView textView_SiteTitle;
         TextView textView_SiteTimings;
         TextView textView_SiteDistance;
+        NetworkImageView imageView;
+
         View siteImage;
 
         public ViewHolder(View itemView) {
@@ -61,6 +68,8 @@ public class AdapterCategoryList extends RecyclerView.Adapter<AdapterCategoryLis
             textView_SiteTimings = (TextView) itemView.findViewById(R.id.site_timings);
             textView_SiteDistance = (TextView) itemView.findViewById(R.id.site_distance);
             siteImage = itemView.findViewById(R.id.layout_bg);
+            imageView = (NetworkImageView) itemView.findViewById(R.id.bg_card_image);
+
         }
     }
 }

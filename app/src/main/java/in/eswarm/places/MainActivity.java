@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,18 +20,29 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.animation.AlphaAnimation;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
+
 import org.json.JSONObject;
 import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, DataRetriever.DataListener {
+        implements NavigationView.OnNavigationItemSelectedListener, DataRetriever.DataListener, AppBarLayout.OnOffsetChangedListener {
 
     RecyclerView mRecyclerView;
     ProgressDialog mDialog;
     AdapterCategoryList mAdapter;
     DataRetriever mDataRetriever;
+    FrameLayout mImageFrame;
+    TextView mCityNameMin;
+    private static final float PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR  = 0.4f;
+    private static final float PERCENTAGE_TO_HIDE_TITLE_DETAILS     = 0.6f;
+    private static final int ALPHA_ANIMATIONS_DURATION              = 200;
+    private boolean mIsTheTitleVisible = false;
+    private boolean mIsTheTitleContainerVisible = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +51,14 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        if(getSupportActionBar() != null)
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, PlacesListActivity.class));
+                startActivity(new Intent(MainActivity.this, AddNewPlaceActivity.class));
             }
         });
 
@@ -79,6 +94,8 @@ public class MainActivity extends AppCompatActivity
             }
         }));
 
+        mCityNameMin = (TextView) findViewById(R.id.city_name_min);
+        mImageFrame = (FrameLayout) findViewById(R.id.imageFrame);
         mDialog = new ProgressDialog(this);
         mDialog.setMessage("Loading...");
         mDialog.setTitle("Fetching Data");
@@ -185,4 +202,59 @@ public class MainActivity extends AppCompatActivity
     public void error() {
         mDialog.hide();
     }
+
+    @Override
+    public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+        int maxScroll = appBarLayout.getTotalScrollRange();
+        float percentage = (float) Math.abs(verticalOffset) / (float) maxScroll;
+
+        handleAlphaOnTitle(percentage);
+        handleToolbarTitleVisibility(percentage);
+    }
+
+    private void handleToolbarTitleVisibility(float percentage) {
+        if (percentage >= PERCENTAGE_TO_SHOW_TITLE_AT_TOOLBAR) {
+
+            if(!mIsTheTitleVisible) {
+                startAlphaAnimation(mCityNameMin, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
+                //startAlphaAnimation(mCityNameMin, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
+                mIsTheTitleVisible = true;
+            }
+
+        } else {
+            if (mIsTheTitleVisible) {
+                startAlphaAnimation(mCityNameMin, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
+                //startAlphaAnimation(mTitleTime, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
+                mIsTheTitleVisible = false;
+            }
+        }
+    }
+
+    private void handleAlphaOnTitle(float percentage) {
+        if (percentage >= PERCENTAGE_TO_HIDE_TITLE_DETAILS) {
+            if(mIsTheTitleContainerVisible) {
+                startAlphaAnimation(mImageFrame, ALPHA_ANIMATIONS_DURATION, View.INVISIBLE);
+                mIsTheTitleContainerVisible = false;
+            }
+
+        } else {
+
+            if (!mIsTheTitleContainerVisible) {
+                startAlphaAnimation(mImageFrame, ALPHA_ANIMATIONS_DURATION, View.VISIBLE);
+                mIsTheTitleContainerVisible = true;
+            }
+        }
+    }
+
+    public static void startAlphaAnimation (View v, long duration, int visibility) {
+        AlphaAnimation alphaAnimation = (visibility == View.VISIBLE)
+                ? new AlphaAnimation(0f, 1f)
+                : new AlphaAnimation(1f, 0f);
+
+        alphaAnimation.setDuration(duration);
+        alphaAnimation.setFillAfter(true);
+        v.startAnimation(alphaAnimation);
+    }
+
+
 }
