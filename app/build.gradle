@@ -32,5 +32,7 @@ dependencies {
     compile 'com.esotericsoftware.kryo:kryo:2.24.0'
     compile "com.android.support:gridlayout-v7:23.1.1"
     compile "com.mcxiaoke.volley:library:1.0.19"
+
+    compile 'de.hdodenhof:circleimageview:2.0.0'
 }
     
