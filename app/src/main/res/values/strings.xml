@@ -104,5 +104,8 @@
     <string name="climate_label">Climate</string>
     <string name="hyphen">-</string>
     <string name="label_ideal_time">Ideal Time</string>
+    <string name="place_list">Place List</string>
+    <string name="details">Details</string>
+    <string name="add_new_place">Add New Place</string>
 
 </resources>

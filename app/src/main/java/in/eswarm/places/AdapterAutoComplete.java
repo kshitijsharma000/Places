@@ -7,9 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.toolbox.NetworkImageView;
 
@@ -20,19 +18,19 @@ import in.eswarm.places.network.Image_Handler;
 /**
  * Created by Kshitij on 2/6/2016.
  */
-public class AdapterPlaceList extends RecyclerView.Adapter<AdapterPlaceList.ViewHolder> {
+public class AdapterAutoComplete extends RecyclerView.Adapter<AdapterAutoComplete.ViewHolder> {
 
     private ArrayList<Data.Place> mPlaces;
     private Context context;
 
-    public AdapterPlaceList(ArrayList<Data.Place> places, Context context) {
+    public AdapterAutoComplete(ArrayList<Data.Place> places, Context context) {
         this.mPlaces = places;
         this.context = context;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        System.out.println("inside view holder");
+        System.out.println("inside adapter autocomplete view holder");
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_place_items, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
         return viewHolder;
@@ -40,7 +38,7 @@ public class AdapterPlaceList extends RecyclerView.Adapter<AdapterPlaceList.View
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        System.out.println("inside on bind view holder");
+        System.out.println("inside adapter auto complete on bind view holder");
         holder.textView_SiteTitle.setText(mPlaces.get(position).getName());
         holder.textView_SiteTimings.setText(mPlaces.get(position).getTiming_start() + "-" + mPlaces.get(position).getTiming_end());
         System.out.println("url : " + mPlaces.get(position).getUrl());
